@@ -1,0 +1,42 @@
+# VCS
+.git
+.gitignore
+
+# OS/editor junk
+.DS_Store
+**/.DS_Store
+.vscode
+.idea
+
+# Build artifacts
+build
+build/
+**/build/
+*/obj
+*/obj/
+*/bin
+*/bin/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.tmp
+*.log
+*.out
+*.out.tmp
+*.out2
+*.out3
+core.*
+a.out
+prog.*
+
+# Archives and generated bundles
+*.tar
+*.tar.gz
+*.tar.bz2
+benchmark_results.csv
+
+# Node artifacts
+node_modules
+npm-debug.log*

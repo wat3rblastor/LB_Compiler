@@ -1,0 +1,40 @@
+#!/bin/bash
+
+CFLAGS="-no-pie"
+origDir=`pwd`
+tmpDir="${origDir}/../../build/L1/tmp"
+compilerBin="${origDir}/../../build/L1/bin/L1"
+runtimeSrc="${origDir}/../../lib/runtime.c"
+
+mkdir -p "${tmpDir}"
+rm -f "${tmpDir}/prog.S" "${tmpDir}/prog.o" "${tmpDir}/runtime.o" "${tmpDir}/a.out"
+
+pushd "${tmpDir}" &> /dev/null
+"${compilerBin}" -g 1 "$@"
+compileStatus=$?
+popd &> /dev/null
+
+if test ${compileStatus} -ne 0 ; then
+  exit 1;
+fi
+
+if ! test -f "${tmpDir}/prog.S" ; then
+  exit 1;
+fi
+
+as -o "${tmpDir}/prog.o" "${tmpDir}/prog.S"
+if ! test -f "${tmpDir}/prog.o" ; then
+  exit 1;
+fi
+
+gcc ${CFLAGS} -O2 -c -g -o "${tmpDir}/runtime.o" "${runtimeSrc}"
+
+gcc ${CFLAGS} -no-pie -o "${tmpDir}/a.out" "${tmpDir}/prog.o" "${tmpDir}/runtime.o"
+
+if ! test -f "${tmpDir}/a.out" ; then
+  exit 1;
+fi
+
+mv "${tmpDir}/a.out" "${origDir}/a.out"
+
+exit 0
